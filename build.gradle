@@ -1,0 +1,37 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    testImplementation(
+            "org.junit.jupiter:junit-jupiter",
+            "io.rest-assured:rest-assured:6.0.0",
+            "io.rest-assured:json-schema-validator:6.0.0",
+            "net.datafaker:datafaker:2.5.4",
+            "tools.jackson.core:jackson-databind:3.1.0",
+            "org.assertj:assertj-core:3.27.7",
+            platform("org.junit:junit-bom:5.10.0")
+            )
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    systemProperties(System.getProperties())
+
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"
+            exceptionFormat "short"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
