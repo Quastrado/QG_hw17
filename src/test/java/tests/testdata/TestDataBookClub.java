@@ -1,0 +1,15 @@
+package tests.testdata;
+
+import net.datafaker.Faker;
+
+public class TestDataBookClub {
+
+    Faker faker = new Faker();
+
+    public String username = faker.name().firstName();
+    public String firstName = faker.name().firstName();
+    public String lastName = faker.name().lastName();
+    public String email = faker.internet().emailAddress();
+    public String password = faker.regexify("[A-Za-z0-9]{9}");
+    public String wrongPassword = password + " ";
+}
