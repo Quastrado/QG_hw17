@@ -24,7 +24,7 @@ public class RegistrationTests extends TestBase {
         SuccessfulRegistrationResponseModel successfulRegistrationResponseModel = given(registrationRequestSpec)
                 .body(registrationBodyModel)
                 .when()
-                .post("/user/register/")
+                .post("/users/register/")
                 .then()
                 .spec(successfulRegistrationResponseSpec)
                 .extract()
