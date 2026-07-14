@@ -10,7 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static specs.registration.RegistrationSpec.registrationRequestSpec;
 import static specs.registration.RegistrationSpec.successfulRegistrationResponseSpec;
 
-public class RegistrationTests {
+public class RegistrationTests extends TestBase {
     TestDataBookClub testData = new TestDataBookClub();
 
     @Test
