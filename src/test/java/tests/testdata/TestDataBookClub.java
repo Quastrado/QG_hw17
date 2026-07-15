@@ -12,4 +12,6 @@ public class TestDataBookClub {
     public String email = faker.internet().emailAddress();
     public String password = faker.regexify("[A-Za-z0-9]{9}");
     public String wrongPassword = password + " ";
+    public String existingUserRegistrationError = "A user with that username already exists.";
+    public String expectedTokenPart = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
 }
