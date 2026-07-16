@@ -1,0 +1,74 @@
+package tests;
+
+import models.login.LoginBodyModel;
+import models.login.SuccessfulLoginResponseModel;
+import models.login.WrongCredentialsLoginResponseModel;
+import org.apache.http.auth.InvalidCredentialsException;
+import org.junit.jupiter.api.Test;
+import tests.testdata.TestDataBookClub;
+
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static specs.registration.RegistrationSpec.successfulRegistrationResponseSpec;
+import static specs.registration.RegistrationSpec.registrationRequestSpec;
+import static specs.login.LoginSpec.*;
+
+public class LoginTest extends TestBase {
+    TestDataBookClub testData = new TestDataBookClub();
+
+    @Test
+    public void successfulLogin() {
+
+        LoginBodyModel registrationData = new LoginBodyModel(
+                testData.username,
+                testData.password
+        );
+
+        given(registrationRequestSpec)
+                .body(registrationData)
+                .when()
+                .post("/users/register/")
+                .then()
+                .spec(successfulRegistrationResponseSpec);
+
+        LoginBodyModel loginData = new LoginBodyModel(
+                testData.username,
+                testData.password
+        );
+
+        SuccessfulLoginResponseModel loginResponse = given(loginRequestSpec)
+                .body(loginData)
+                .when()
+                .post("/auth/token/")
+                .then()
+                .spec(successfulLoginResponseSpec)
+                .extract().as(SuccessfulLoginResponseModel.class);
+
+        String access = loginResponse.access();
+        String refresh = loginResponse.refresh();
+
+        assertThat(access).startsWith(testData.expectedTokenPart);
+        assertThat(refresh).startsWith(testData.expectedTokenPart);
+        assertThat(access).isNotEqualTo(refresh);
+    }
+
+    @Test
+    public void wrongCredentialsLoginTest() {
+
+        LoginBodyModel registrationData = new LoginBodyModel(
+                testData.username,
+                testData.wrongPassword
+        );
+
+        WrongCredentialsLoginResponseModel loginResponse = given(loginRequestSpec)
+                .body(registrationData)
+                .when()
+                .post("/auth/token/")
+                .then()
+                .spec(wrongCredentialsLoginResponseSpec)
+                .extract().as(WrongCredentialsLoginResponseModel.class);
+
+        String error = loginResponse.detail();
+        assertThat(error).isEqualTo(testData.wrongCredentialsError);
+    }
+}
