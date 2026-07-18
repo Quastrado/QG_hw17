@@ -18,7 +18,7 @@ import static specs.logout.LogoutSpec.*;
 import static specs.registration.RegistrationSpec.registrationRequestSpec;
 import static specs.registration.RegistrationSpec.successfulRegistrationResponseSpec;
 
-public class LogoutTest {
+public class LogoutTest extends TestBase{
     TestDataBookClub testData = new TestDataBookClub();
 
     @Test

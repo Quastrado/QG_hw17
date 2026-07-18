@@ -17,7 +17,7 @@ public class LogoutSpec {
             .log(ALL)
             .expectStatusCode(200)
             .expectBody(matchesJsonSchemaInClasspath(
-                    "schemas/logout/successful_logout_response_schema"
+                    "schemas/logout/successful_logout_response_schema.json"
             ))
             .build();
 

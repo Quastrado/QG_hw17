@@ -1,9 +1,7 @@
 package tests;
 
-import models.login.LoginBodyModel;
-import models.login.SuccessfulLoginResponseModel;
-import models.login.WrongCredentialsLoginResponseModel;
-import org.apache.http.auth.InvalidCredentialsException;
+import models.login.*;
+import models.logout.WrongRefreshTokenResponseModel;
 import org.junit.jupiter.api.Test;
 import tests.testdata.TestDataBookClub;
 
@@ -70,5 +68,40 @@ public class LoginTest extends TestBase {
 
         String error = loginResponse.detail();
         assertThat(error).isEqualTo(testData.wrongCredentialsError);
+    }
+
+    @Test
+    public void emptyRefreshTokenLoginTest() {
+        WithoutRefreshTokenLoginBodyModel emptyRefreshToken = new WithoutRefreshTokenLoginBodyModel();
+        WithoutRefreshTokenLoginResponseModel emptyRefreshResponseModel = given(loginRequestSpec)
+                .body(emptyRefreshToken)
+                .when()
+                .post("/auth/token/refresh/")
+                .then()
+                .spec(withoutRefreshTokenResponseSpec)
+                .extract().as(WithoutRefreshTokenLoginResponseModel.class);
+
+        String actualRefresh = emptyRefreshResponseModel.refresh().get(0);
+        assertThat(actualRefresh).isEqualTo(testData.requiredFieldError);
+    }
+
+    @Test
+    public void wrongRefreshTokenLoginTest() {
+        InvalidRefreshTokenBodyModel invalidTokenBodyModel = new InvalidRefreshTokenBodyModel(
+                testData.wrongRefreshToken
+        );
+        WrongRefreshTokenResponseModel loginResponse = given(loginRequestSpec)
+                .body(invalidTokenBodyModel)
+                .when()
+                .post("/auth/token/refresh/")
+                .then()
+                .spec(wrongRefreshTokenResponseSpec)
+                .extract().as(WrongRefreshTokenResponseModel.class);
+
+        String detailInvalidRefreshToken = loginResponse.detail();
+        String codeInvalidRefreshToken = loginResponse.code();
+
+        assertThat(detailInvalidRefreshToken).isEqualTo(testData.invalidTokenError);
+        assertThat(codeInvalidRefreshToken).isEqualTo(testData.notValidTokenCodeError);
     }
 }

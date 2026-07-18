@@ -16,6 +16,9 @@ public class TestDataBookClub {
     public String expectedTokenPart = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
     public String wrongCredentialsError = "Invalid username or password.";
     public String requiredFieldError = "This field is required.";
+    public String notBeBlankError = "This field may not be blank.";
+    public String wrongRefreshToken = "wrong token";
+    public String invalidTokenError = "Token is invalid";
     public String wrongTokenTypeError = "Token has wrong type";
     public String notValidTokenCodeError = "token_not_valid";
 }

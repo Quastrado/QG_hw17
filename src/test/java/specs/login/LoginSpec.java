@@ -28,4 +28,21 @@ public class LoginSpec {
                     "schemas/login/wrong_credentials_login_response_schema.json"))
             .expectBody("detail", notNullValue())
             .build();
+
+    public static ResponseSpecification withoutRefreshTokenResponseSpec = new ResponseSpecBuilder()
+            .log(ALL)
+            .expectStatusCode(400)
+            .expectBody(matchesJsonSchemaInClasspath
+                    ("schemas/login/empty_field_refresh_response_schemas.json"))
+            .expectBody("refresh", notNullValue())
+            .build();
+
+    public static ResponseSpecification wrongRefreshTokenResponseSpec = new ResponseSpecBuilder()
+            .log(ALL)
+            .expectStatusCode(401)
+            .expectBody(matchesJsonSchemaInClasspath
+                    ("schemas/login/wrong_refresh_token_response_schemas.json"))
+            .expectBody("detail", notNullValue())
+            .expectBody("code", notNullValue())
+            .build();
 }
