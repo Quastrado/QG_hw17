@@ -12,10 +12,9 @@ import tests.testdata.TestDataBookClub;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static specs.login.LoginSpec.loginRequestSpec;
+import static specs.BaseSpec.baseRequestSpec;
 import static specs.login.LoginSpec.successfulLoginResponseSpec;
 import static specs.logout.LogoutSpec.*;
-import static specs.registration.RegistrationSpec.registrationRequestSpec;
 import static specs.registration.RegistrationSpec.successfulRegistrationResponseSpec;
 
 public class LogoutTest extends TestBase{
@@ -24,7 +23,7 @@ public class LogoutTest extends TestBase{
     @Test
     public void successfulLogoutTest() {
         RegistrationBodyModel registrationData = new RegistrationBodyModel(testData.username, testData.password);
-        given(registrationRequestSpec)
+        given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -32,7 +31,7 @@ public class LogoutTest extends TestBase{
                 .spec(successfulRegistrationResponseSpec);
 
         LoginBodyModel loginData = new LoginBodyModel(testData.username, testData.password);
-        SuccessfulLoginResponseModel responseLogin = given(loginRequestSpec)
+        SuccessfulLoginResponseModel responseLogin = given(baseRequestSpec)
                 .body(loginData)
                 .when()
                 .post("/auth/token/")
@@ -43,7 +42,7 @@ public class LogoutTest extends TestBase{
         String refreshToken = responseLogin.refresh();
 
         LogoutBodyModel logoutData = new LogoutBodyModel(refreshToken);
-        given(logoutRequestSpec)
+        given(baseRequestSpec)
                 .body(logoutData)
                 .when()
                 .post("/auth/logout/")
@@ -56,7 +55,7 @@ public class LogoutTest extends TestBase{
 
         WithoutRefreshTokenLogoutBodyModel logoutData = new WithoutRefreshTokenLogoutBodyModel();
         WithoutRefreshTokenLogoutResponseModel logoutResponse =
-                given(logoutRequestSpec)
+                given(baseRequestSpec)
                         .body(logoutData)
                         .when()
                         .post("/auth/logout/")
@@ -72,7 +71,7 @@ public class LogoutTest extends TestBase{
     @Test
     public void accessTokenInsteadOfRefreshTokenNegativeTest() {
         RegistrationBodyModel registrationData = new RegistrationBodyModel(testData.username, testData.password);
-        given(registrationRequestSpec)
+        given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -80,7 +79,7 @@ public class LogoutTest extends TestBase{
                 .spec(successfulRegistrationResponseSpec);
 
         LoginBodyModel data = new LoginBodyModel(testData.username, testData.password);
-        SuccessfulLoginResponseModel responseLogin = given(loginRequestSpec)
+        SuccessfulLoginResponseModel responseLogin = given(baseRequestSpec)
                 .body(data)
                 .when()
                 .post("/auth/token/")
@@ -92,7 +91,7 @@ public class LogoutTest extends TestBase{
 
         LogoutBodyModel logoutData = new LogoutBodyModel(accessToken);
         WrongRefreshTokenResponseModel logoutResponse =
-                given(logoutRequestSpec)
+                given(baseRequestSpec)
                         .body(logoutData)
                         .when()
                         .post("/auth/logout/")

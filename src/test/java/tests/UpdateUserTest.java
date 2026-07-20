@@ -10,9 +10,8 @@ import tests.testdata.TestDataBookClub;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static specs.login.LoginSpec.loginRequestSpec;
+import static specs.BaseSpec.baseRequestSpec;
 import static specs.login.LoginSpec.successfulLoginResponseSpec;
-import static specs.registration.RegistrationSpec.registrationRequestSpec;
 import static specs.registration.RegistrationSpec.successfulRegistrationResponseSpec;
 import static specs.user_update.UpdateUserSpec.*;
 
@@ -23,7 +22,7 @@ public class UpdateUserTest extends TestBase{
     public void successfulUpdateUserWithPutTest() {
 
         RegistrationBodyModel registrationData = new RegistrationBodyModel(testData.username, testData.password);
-        given(registrationRequestSpec)
+        given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -31,13 +30,14 @@ public class UpdateUserTest extends TestBase{
                 .spec(successfulRegistrationResponseSpec);
 
         LoginBodyModel dataLogin = new LoginBodyModel(testData.username, testData.password);
-        SuccessfulLoginResponseModel responseLogin = given(loginRequestSpec)
+        SuccessfulLoginResponseModel responseLogin = given(baseRequestSpec)
                 .body(dataLogin)
                 .when()
                 .post("/auth/token/")
                 .then()
                 .spec(successfulLoginResponseSpec)
-                .extract().as(SuccessfulLoginResponseModel.class);
+                .extract()
+                .as(SuccessfulLoginResponseModel.class);
 
         String accessToken = responseLogin.access();
 
@@ -48,14 +48,15 @@ public class UpdateUserTest extends TestBase{
                 testData.email
         );
         SuccessfulUpdateUserResponseModel responseUpdateUser =
-                given(updateUserRequestSpec)
+                given(baseRequestSpec)
                         .header("Authorization", "Bearer " + accessToken)
                         .body(dataUpdateUser)
                         .when()
                         .put("/users/me/")
                         .then()
                         .spec(successfulUpdateUserResponseSpec)
-                        .extract().as(SuccessfulUpdateUserResponseModel.class);
+                        .extract()
+                        .as(SuccessfulUpdateUserResponseModel.class);
 
         String actualUsername = responseUpdateUser.username();
         String actualFirstName = responseUpdateUser.firstName();
@@ -73,7 +74,7 @@ public class UpdateUserTest extends TestBase{
     @Test
     public void successfulUpdateUserWithPatchTest() {
         RegistrationBodyModel registrationData = new RegistrationBodyModel(testData.username, testData.password);
-        given(registrationRequestSpec)
+        given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -81,7 +82,7 @@ public class UpdateUserTest extends TestBase{
                 .spec(successfulRegistrationResponseSpec);
 
         LoginBodyModel dataLogin = new LoginBodyModel(testData.username, testData.password);
-        SuccessfulLoginResponseModel responseLogin = given(loginRequestSpec)
+        SuccessfulLoginResponseModel responseLogin = given(baseRequestSpec)
                 .body(dataLogin)
                 .when()
                 .post("/auth/token/")
@@ -97,14 +98,15 @@ public class UpdateUserTest extends TestBase{
                 testData.lastName,
                 testData.email);
         SuccessfulUpdateUserResponseModel responseUpdateUser =
-                given(updateUserRequestSpec)
+                given(baseRequestSpec)
                         .header("Authorization", "Bearer " + accessToken)
                         .body(dataUpdateUser)
                         .when()
                         .patch("/users/me/")
                         .then()
                         .spec(successfulUpdateUserResponseSpec)
-                        .extract().as(SuccessfulUpdateUserResponseModel.class);
+                        .extract()
+                        .as(SuccessfulUpdateUserResponseModel.class);
 
         String actualUsername = responseUpdateUser.username();
         String actualFirstName = responseUpdateUser.firstName();
@@ -122,7 +124,7 @@ public class UpdateUserTest extends TestBase{
     @Test
     public void successfulPartialUpdateUserWithPatchTest() {
         RegistrationBodyModel registrationData = new RegistrationBodyModel(testData.username, testData.password);
-        given(registrationRequestSpec)
+        given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -130,27 +132,29 @@ public class UpdateUserTest extends TestBase{
                 .spec(successfulRegistrationResponseSpec);
 
         LoginBodyModel dataLogin = new LoginBodyModel(testData.username, testData.password);
-        SuccessfulLoginResponseModel responseLogin = given(loginRequestSpec)
+        SuccessfulLoginResponseModel responseLogin = given(baseRequestSpec)
                 .body(dataLogin)
                 .when()
                 .post("/auth/token/")
                 .then()
                 .spec(successfulLoginResponseSpec)
-                .extract().as(SuccessfulLoginResponseModel.class);
+                .extract()
+                .as(SuccessfulLoginResponseModel.class);
 
         String accessToken = responseLogin.access();
 
         PartialUpdateUserBodyModel dataUpdateUser =
                 new PartialUpdateUserBodyModel(testData.username, testData.email);
         SuccessfulUpdateUserResponseModel responseUpdateUser =
-                given(updateUserRequestSpec)
+                given(baseRequestSpec)
                         .header("Authorization", "Bearer " + accessToken)
                         .body(dataUpdateUser)
                         .when()
                         .patch("/users/me/")
                         .then()
                         .spec(successfulUpdateUserResponseSpec)
-                        .extract().as(SuccessfulUpdateUserResponseModel.class);
+                        .extract()
+                        .as(SuccessfulUpdateUserResponseModel.class);
 
         String actualUsername = responseUpdateUser.username();
         String actualEmail = responseUpdateUser.email();
@@ -165,7 +169,7 @@ public class UpdateUserTest extends TestBase{
     public void partialUpdateUserWithPutNegativeTest() {
 
         RegistrationBodyModel registrationData = new RegistrationBodyModel(testData.username, testData.password);
-        given(registrationRequestSpec)
+        given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -173,27 +177,29 @@ public class UpdateUserTest extends TestBase{
                 .spec(successfulRegistrationResponseSpec);
 
         LoginBodyModel dataLogin = new LoginBodyModel(testData.username, testData.password);
-        SuccessfulLoginResponseModel responseLogin = given(loginRequestSpec)
+        SuccessfulLoginResponseModel responseLogin = given(baseRequestSpec)
                 .body(dataLogin)
                 .when()
                 .post("/auth/token/")
                 .then()
                 .spec(successfulLoginResponseSpec)
-                .extract().as(SuccessfulLoginResponseModel.class);
+                .extract()
+                .as(SuccessfulLoginResponseModel.class);
 
         String accessToken = responseLogin.access();
 
         PartialUpdateUserBodyModel dataUpdateUser =
                 new PartialUpdateUserBodyModel(testData.username, testData.email);
         IncorrectPartialUpdateUserResponseModel responseUpdateUser =
-                given(updateUserRequestSpec)
+                given(baseRequestSpec)
                         .header("Authorization", "Bearer " + accessToken)
                         .body(dataUpdateUser)
                         .when()
                         .put("/users/me/")
                         .then()
                         .spec(unsuccessfulPartialUpdateUserResponseSpec)
-                        .extract().as(IncorrectPartialUpdateUserResponseModel.class);
+                        .extract()
+                        .as(IncorrectPartialUpdateUserResponseModel.class);
 
         String actualFirstName = responseUpdateUser.firstName().get(0);
         String actualLastName = responseUpdateUser.lastName().get(0);
@@ -214,13 +220,14 @@ public class UpdateUserTest extends TestBase{
                 testData.email
         );
         UnauthorizedResponseModel responseUpdateUser =
-                given(updateUserRequestSpec)
+                given(baseRequestSpec)
                         .body(dataUpdateUser)
                         .when()
                         .put("/users/me/")
                         .then()
                         .spec(unauthorizedResponseSpec)
-                        .extract().as(UnauthorizedResponseModel.class);
+                        .extract()
+                        .as(UnauthorizedResponseModel.class);
 
         String actualDetail = responseUpdateUser.detail();
         assertThat(actualDetail).isEqualTo(testData.unauthorizedError);

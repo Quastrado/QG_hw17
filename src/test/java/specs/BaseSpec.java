@@ -9,6 +9,5 @@ public class BaseSpec {
 
     public static RequestSpecification baseRequestSpec = with()
             .log().all()
-            .contentType(JSON)
-            .basePath("/api/v1");
+            .contentType(JSON);
 }

@@ -7,8 +7,8 @@ import tests.testdata.TestDataBookClub;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static specs.BaseSpec.baseRequestSpec;
 import static specs.registration.RegistrationSpec.successfulRegistrationResponseSpec;
-import static specs.registration.RegistrationSpec.registrationRequestSpec;
 import static specs.login.LoginSpec.*;
 
 public class LoginTest extends TestBase {
@@ -22,7 +22,7 @@ public class LoginTest extends TestBase {
                 testData.password
         );
 
-        given(registrationRequestSpec)
+        given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -34,7 +34,7 @@ public class LoginTest extends TestBase {
                 testData.password
         );
 
-        SuccessfulLoginResponseModel loginResponse = given(loginRequestSpec)
+        SuccessfulLoginResponseModel loginResponse = given(baseRequestSpec)
                 .body(loginData)
                 .when()
                 .post("/auth/token/")
@@ -58,7 +58,7 @@ public class LoginTest extends TestBase {
                 testData.wrongPassword
         );
 
-        WrongCredentialsLoginResponseModel loginResponse = given(loginRequestSpec)
+        WrongCredentialsLoginResponseModel loginResponse = given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/auth/token/")
@@ -73,7 +73,7 @@ public class LoginTest extends TestBase {
     @Test
     public void emptyRefreshTokenLoginTest() {
         WithoutRefreshTokenLoginBodyModel emptyRefreshToken = new WithoutRefreshTokenLoginBodyModel();
-        WithoutRefreshTokenLoginResponseModel emptyRefreshResponseModel = given(loginRequestSpec)
+        WithoutRefreshTokenLoginResponseModel emptyRefreshResponseModel = given(baseRequestSpec)
                 .body(emptyRefreshToken)
                 .when()
                 .post("/auth/token/refresh/")
@@ -90,7 +90,7 @@ public class LoginTest extends TestBase {
         InvalidRefreshTokenBodyModel invalidTokenBodyModel = new InvalidRefreshTokenBodyModel(
                 testData.wrongRefreshToken
         );
-        WrongRefreshTokenResponseModel loginResponse = given(loginRequestSpec)
+        WrongRefreshTokenResponseModel loginResponse = given(baseRequestSpec)
                 .body(invalidTokenBodyModel)
                 .when()
                 .post("/auth/token/refresh/")

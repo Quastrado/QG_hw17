@@ -6,6 +6,7 @@ import tests.testdata.TestDataBookClub;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static specs.BaseSpec.baseRequestSpec;
 import static specs.registration.RegistrationSpec.*;
 
 
@@ -19,7 +20,7 @@ public class RegistrationTests extends TestBase {
                 testData.username,
                 testData.password
         );
-        SuccessfulRegistrationResponseModel successfulRegistrationResponseModel = given(registrationRequestSpec)
+        SuccessfulRegistrationResponseModel successfulRegistrationResponseModel = given(baseRequestSpec)
                 .body(registrationBodyModel)
                 .when()
                 .post("/users/register/")
@@ -40,7 +41,7 @@ public class RegistrationTests extends TestBase {
                 testData.username,
                 testData.password
         );
-        SuccessfulRegistrationResponseModel firstRegistrationResponse = given(registrationRequestSpec)
+        SuccessfulRegistrationResponseModel firstRegistrationResponse = given(baseRequestSpec)
                 .body(registrationBodyModel)
                 .when()
                 .post("/users/register/")
@@ -49,7 +50,7 @@ public class RegistrationTests extends TestBase {
                 .extract()
                 .as(SuccessfulRegistrationResponseModel.class);
 
-        ExistingUserResponseModel secondRegistrationResponse = given(registrationRequestSpec)
+        ExistingUserResponseModel secondRegistrationResponse = given(baseRequestSpec)
                 .body(registrationBodyModel)
                 .when()
                 .post("/users/register/")
@@ -66,7 +67,7 @@ public class RegistrationTests extends TestBase {
     public void emptyUsernameRegistrationNegativeTest() {
         RegistrationBodyModel registrationData = new RegistrationBodyModel("", testData.password);
 
-        EmptyFieldUsernameResponseModel emptyFieldUsernameResponseModel = given(registrationRequestSpec)
+        EmptyFieldUsernameResponseModel emptyFieldUsernameResponseModel = given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
@@ -83,7 +84,7 @@ public class RegistrationTests extends TestBase {
     public void emptyUsernamePasswordNegativeTest() {
         RegistrationBodyModel registrationData = new RegistrationBodyModel( testData.username, "");
 
-        EmptyFieldPasswordResponseModel emptyFieldUsernameResponseModel = given(registrationRequestSpec)
+        EmptyFieldPasswordResponseModel emptyFieldUsernameResponseModel = given(baseRequestSpec)
                 .body(registrationData)
                 .when()
                 .post("/users/register/")
